@@ -38,8 +38,18 @@ class GroupPack(ObjectPack):
 class PermissionPack(ObjectPack):
     model = Permission
 
+
     add_to_menu = True
     add_to_desktop = True
 
     add_window = PermissionAddWindow
+    #add_window = ModelEditWindow.fabricate(model=model)
     edit_window = PermissionEditWindow
+    #edit_window = ModelEditWindow.fabricate(model=model)
+
+    def save_row(self, obj, create_new, request, context):
+        s = obj
+        content_type = ContentType.objects.get(id=int(request.POST['content_type']))
+        obj.content_type  = content_type
+        
+        super(PermissionPack, self).save_row(obj, create_new, request, context)
